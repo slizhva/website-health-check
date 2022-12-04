@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Auth::routes();
+
+Route::get('/', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+Route::post('/dashboard/link/add', [App\Http\Controllers\DashboardController::class, 'add'])->name('dashboard.link.add');
+Route::post('/dashboard/link/delete', [App\Http\Controllers\DashboardController::class, 'delete'])->name('dashboard.link.delete');
