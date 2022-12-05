@@ -20,7 +20,7 @@ class DashboardController extends Controller
         $links = Links
             ::where('user', Auth::id())
             ->orderBy('id', 'desc')
-            ->get(['id', 'link', 'status'])
+            ->get(['id', 'link', 'success_content', 'status'])
             ->toArray();
 
         return view('dashboard', [
@@ -33,6 +33,7 @@ class DashboardController extends Controller
         $links = new Links;
         $links->user = Auth::id();
         $links->link = $request->get('link');
+        $links->success_content = $request->get('success_content');
         $links->save();
 
         return redirect()->route('dashboard');
@@ -44,6 +45,18 @@ class DashboardController extends Controller
             ::where('id', $request->get('id'))
             ->where('user', Auth::id())
             ->delete();
+
+        return redirect()->route('dashboard');
+    }
+
+    public function update(Request $request):RedirectResponse
+    {
+        Links
+            ::where('id', $request->get('id'))
+            ->update([
+                'link' => $request->get('link'),
+                'success_content' => $request->get('success_content'),
+            ]);
 
         return redirect()->route('dashboard');
     }
