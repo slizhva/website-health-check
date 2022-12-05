@@ -35,8 +35,8 @@
             <div class="p3 col-md-4 border-start p-1">{{ $link['success_content'] }}</div>
             <div class="col-md-2 border-start {{ $link['status'] ? 'text-success' : 'text-danger' }}">
                 {{ $link['status'] === null ? '-----------' : '' }}
-                {{ $link['status'] === true ? 'AVAILABLE' : '' }}
-                {{ $link['status'] === false ? 'DISABLED' : '' }}
+                {{ $link['status'] === 1 ? 'AVAILABLE' : '' }}
+                {{ $link['status'] === 0 ? 'ERROR' : '' }}
             </div>
             <div class="col-md-1 border-start">
                 <x-modal
