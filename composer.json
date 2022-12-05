@@ -6,12 +6,13 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "ext-curl": "*",
         "guzzlehttp/guzzle": "^7.2",
+        "laravel-notification-channels/telegram": "^3.0",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
-        "laravel/ui": "^4.1",
-        "ext-curl": "*"
+        "laravel/ui": "^4.1"
     },
     "require-dev": {
         "roave/security-advisories": "dev-latest",
