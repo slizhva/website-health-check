@@ -28,7 +28,20 @@ class Links extends Model
         'status',
     ];
 
-    public function getErrorCommandAttribute():object|null {
-        return Commands::where('link', $this->id)->limit(1)->get('command')[0]->value ?? null;
+    public function getErrorCommandAttribute():object|null|int {
+        return Commands
+            ::where('link', $this->id)
+            ->where('type', Commands::STATUS_ERROR)
+            ->limit(1)
+            ->get('command')[0]->command ?? null;
+    }
+
+    public function setErrorCommandAttribute(array $command):void {
+        Commands::updateOrCreate([
+            'link' => $this->id,
+            'type' => Commands::STATUS_ERROR
+        ],[
+            'command' => $command
+        ]);
     }
 }

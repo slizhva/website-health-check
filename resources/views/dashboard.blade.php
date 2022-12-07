@@ -15,7 +15,7 @@
 @section('admin-body')
     <strong>---Links---</strong>
     <div class="w-50">
-        <x-link.form action="{{ route('dashboard.link.add') }}"></x-link.form>
+        <x-link.form action="{{ route('dashboard.link.add') }}" buttonText="Add"></x-link.form>
     </div>
     <div class="row border-bottom border-top bg-light">
         <div class="col-md-8 border-start">Link</div>
@@ -36,7 +36,11 @@
                     title="Configure notifications"
                     closeText="Close"
                 >
-                    <x-link.form action="{{ route('dashboard.link.update') }}" :link="$link"></x-link.form>
+                    <x-link.form
+                        action="{{ route('dashboard.link.update') }}"
+                        buttonText="Update"
+                        :link="$link"
+                    ></x-link.form>
                 </x-modal>
             </div>
             <div class="col-md-1 border-start border-end ">

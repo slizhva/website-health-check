@@ -62,5 +62,5 @@
         >@if (isset($link->error_command->header)){{ $link->error_command->header }}@endif</textarea>
     </fieldset>
 
-    <input type="submit" value="Add" class="col-md-2 mt-3">
+    <input type="submit" value="{{ $buttonText }}" class="col-md-2 mt-3">
 </form>

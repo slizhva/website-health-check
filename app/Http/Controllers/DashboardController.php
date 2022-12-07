@@ -7,7 +7,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 use App\Models\Links;
-use App\Models\Commands;
 
 class DashboardController extends Controller
 {
@@ -33,19 +32,15 @@ class DashboardController extends Controller
         $link = new Links;
         $link->user = Auth::id();
         $link->link = $request->get('link');
-        $link->status = Links::STATUS_PENDING;
         $link->success_content = $request->get('success_content');
+        $link->status = Links::STATUS_PENDING;
         $link->save();
-
-        $command = new Commands;
-        $command->link = $link->id;
-        $command->type = Commands::STATUS_ERROR;
-        $command->command = [
+        $link->error_command = [
             'url' => $request->get('request_error_url'),
             'type' => $request->get('request_error_type'),
             'header' => $request->get('request_error_header'),
         ];
-        $command->save();
+        $link->save();
 
         return redirect()->route('dashboard');
     }
@@ -62,16 +57,16 @@ class DashboardController extends Controller
 
     public function update(Request $request):RedirectResponse
     {
-        Links
-            ::where('id', $request->get('id'))
-            ->update([
-                'link' => $request->get('link'),
-                'status' => Links::STATUS_PENDING,
-                'command' => [
-
-                ],
-                'success_content' => $request->get('success_content'),
-            ]);
+        $link = Links::find($request->get('id'));
+        $link->link = $request->get('link');
+        $link->success_content = $request->get('success_content');
+        $link->status = Links::STATUS_PENDING;
+        $link->error_command = [
+            'url' => $request->get('request_error_url'),
+            'type' => $request->get('request_error_type'),
+            'header' => $request->get('request_error_header'),
+        ];
+        $link->save();
 
         return redirect()->route('dashboard');
     }
