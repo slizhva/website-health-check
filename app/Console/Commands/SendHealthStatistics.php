@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Notification;
-use App\Notifications\HealthStatisticsNotification;
+use App\Notifications\HealthStatusNotification;
 
 use App\Models\Links;
 
@@ -17,17 +17,16 @@ class SendHealthStatistics extends Command
     {
         $links = Links
             ::orderBy('user', 'asc')
-            ->get(['link', 'status'])
-            ->toArray();
+            ->get(['link', 'status']);
 
         $statistics = '';
         foreach ($links as $link) {
             $statistics .=
-                ($link['status'] ? 'SUCCESS: ' : 'ERROR: ') .
-                $link['link'] . "\n\n";
+                Links::STATUS_LABEL[$link->status] .
+                $link->link . "\n\n";
         }
 
-        Notification::send('telegram', new HealthStatisticsNotification([
+        Notification::send('telegram', new HealthStatusNotification([
             'to' => env('TELEGRAM_CHAT_ID'),
             'content' => $statistics,
         ]));

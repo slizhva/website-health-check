@@ -7,36 +7,66 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Notification;
 
 use App\Models\Links;
-use App\Notifications\HealthStatisticsNotification;
+use App\Notifications\HealthStatusNotification;
 
 class CheckHealth extends Command
 {
     protected $signature = 'health:check';
     protected $description = 'Check websites health';
 
+    private function executeCurl(object $request): bool|string
+    {
+        if (!$request) { return false; }
+
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $request->url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array_map('trim', explode("\n", $request->header)));
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $request->type);
+        $state_result = curl_exec($curl);
+        curl_close($curl);
+
+        return $state_result;
+    }
+
     public function handle():int
     {
         $links = Links
-            ::get(['id', 'user', 'link', 'success_content', 'status'])
-            ->toArray();
+            ::get(['id', 'user', 'link', 'success_content', 'status']);
 
         foreach ($links as $link) {
             try {
-                $linkContent = file_get_contents($link['link']);
+                $linkContent = file_get_contents($link->link);
                 if (str_contains($linkContent, $link['success_content'])) {
-                    Links::where('id', $link['id'])->update(['status' => Links::STATUS_AVAILABLE]);
+                    Links::where('id', $link->id)->update(['status' => Links::STATUS_AVAILABLE]);
                 } else {
-                    Links::where('id', $link['id'])->update(['status' => Links::STATUS_UNAVAILABLE]);
-                    Notification::send('telegram', new HealthStatisticsNotification([
+                    Links::where('id', $link->id)->update(['status' => Links::STATUS_UNAVAILABLE]);
+
+                    Notification::send('telegram', new HealthStatusNotification([
                         'to' => env('TELEGRAM_CHAT_ID'),
-                        'content' => 'ERROR: ' . $link['link'],
+                        'content' => 'ERROR: ' . $link->link,
                     ]));
+
+                    $response = $this->executeCurl($link->error_command);
+                    $status = null;
+                    $name = null;
+                    try {
+                        $result = json_decode($response, false);
+                        $status = $result->status;
+                        $name = $result->name;
+                    } catch (Exception) {}
+                    if ($status === "stopped") {
+                        Notification::send('telegram', new HealthStatusNotification([
+                            'to' => env('TELEGRAM_CHAT_ID'),
+                            'content' => ($name ?: $link)  . ' server restarted!',
+                        ]));
+                    }
                 }
-            } catch (Exception $e) {
-                Links::where('id', $link['id'])->update(['status' => Links::STATUS_UNAVAILABLE]);
-                Notification::send('telegram', new HealthStatisticsNotification([
+            } catch (Exception) {
+                Links::where('id', $link->id)->update(['status' => Links::STATUS_PENDING]);
+                Notification::send('telegram', new HealthStatusNotification([
                     'to' => env('TELEGRAM_CHAT_ID'),
-                    'content' => 'ERROR: ' . $link['link'],
+                    'content' => 'PENDING: ' . $link->link,
                 ]));
             }
         }

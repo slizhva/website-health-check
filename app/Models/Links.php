@@ -9,25 +9,26 @@ class Links extends Model
 {
     use HasFactory;
 
-    const STATUS_AVAILABLE = 1;
-    const STATUS_UNAVAILABLE = 0;
+    public const STATUS_PENDING = 0;
+    public const STATUS_AVAILABLE = 1;
+    public const STATUS_UNAVAILABLE = 2;
 
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
+    public const STATUS_LABEL = [
+        self::STATUS_PENDING => 'Pending',
+        self::STATUS_AVAILABLE => 'Available',
+        self::STATUS_UNAVAILABLE => 'Unavailable',
+    ];
+
     protected $table = 'links';
 
-    /**
-     * Fields that are mass assignable
-     *
-     * @var array
-     */
     protected $fillable = [
         'user',
         'link',
         'success_content',
         'status',
     ];
+
+    public function getErrorCommandAttribute() {
+        return Commands::where('link', $this->id)->limit(1)->get('command')[0]->command;
+    }
 }

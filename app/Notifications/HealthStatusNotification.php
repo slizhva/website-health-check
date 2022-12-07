@@ -6,15 +6,15 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use NotificationChannels\Telegram\TelegramMessage;
 
-class HealthStatisticsNotification extends Notification
+class HealthStatusNotification extends Notification
 {
     use Queueable;
 
-    private array $statisticsData;
+    private array $healthData;
 
-    public function __construct(array $statisticsData)
+    public function __construct(array $healthData)
     {
-        $this->statisticsData = $statisticsData;
+        $this->healthData = $healthData;
     }
 
     public function via():array
@@ -25,8 +25,8 @@ class HealthStatisticsNotification extends Notification
     public function toTelegram(mixed $notifiable)
     {
         return TelegramMessage::create()
-            ->to($this->statisticsData['to'])
-            ->content($this->statisticsData['content']);
+            ->to($this->healthData['to'])
+            ->content($this->healthData['content']);
     }
 
     public function toArray(mixed $notifiable):array
