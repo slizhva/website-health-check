@@ -35,7 +35,6 @@
             type="text"
             placeholder="https://google.com"
             class="col-md-12"
-            required
             value="@if (isset($link->error_command->url)){{ $link->error_command->url }}@endif"
         >
 
@@ -46,7 +45,6 @@
             type="text"
             placeholder="POST"
             class="col-md-12"
-            required
             value="@if (isset($link->error_command->type)){{ $link->error_command->type }}@endif"
         >
 
@@ -58,7 +56,6 @@
             placeholder="Content-Type: application/json;charset=UTF-8"
             class="col-md-12"
             rows="4"
-            required
         >@if (isset($link->error_command->header)){{ $link->error_command->header }}@endif</textarea>
     </fieldset>
 
