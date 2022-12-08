@@ -23,6 +23,7 @@ class SendHealthStatistics extends Command
         foreach ($links as $link) {
             $statistics .=
                 Links::STATUS_LABEL[$link->status] .
+                ": " .
                 $link->link . "\n\n";
         }
 
