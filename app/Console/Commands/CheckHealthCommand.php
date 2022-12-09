@@ -6,10 +6,10 @@ use Exception;
 use Illuminate\Console\Command;
 
 use App\Models\Links;
-use App\Events\LinkUnavailable;
-use App\Events\LinkCheckException;
+use App\Events\LinkUnavailableEvent;
+use App\Events\LinkCheckExceptionEvent;
 
-class CheckHealth extends Command
+class CheckHealthCommand extends Command
 {
     protected $signature = 'health:check';
     protected $description = 'Check websites health';
@@ -25,11 +25,11 @@ class CheckHealth extends Command
                     'status' => $isCheckSuccess ? Links::STATUS_AVAILABLE : Links::STATUS_UNAVAILABLE
                 ]);
 
-                LinkUnavailable::dispatchIf(!$isCheckSuccess, $link);
+                LinkUnavailableEvent::dispatchIf(!$isCheckSuccess, $link);
             } catch (Exception) {
                 Links::where('id', $link->id)->update(['status' => Links::STATUS_PENDING]);
 
-                LinkCheckException::dispatch($link);
+                LinkCheckExceptionEvent::dispatch($link);
             }
         }
 

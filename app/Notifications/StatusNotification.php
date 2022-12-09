@@ -6,7 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use NotificationChannels\Telegram\TelegramMessage;
 
-class HealthStatusNotification extends Notification
+class StatusNotification extends Notification
 {
     use Queueable;
 

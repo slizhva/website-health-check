@@ -7,13 +7,13 @@ use Illuminate\Broadcasting\PrivateChannel;
 
 use App\Models\Links;
 
-class LinkCheckException extends Event
+class LinkUnavailableEvent extends Event
 {
-    public string $eventLabel = 'EXCEPTION';
-
     public function __construct(
         public Links $link
-    ) {}
+    ) {
+        $this->info = 'UNAVAILABLE' . ': ' . $this->link->url;
+    }
 
     public function broadcastOn():Channel|array {
         return new PrivateChannel('link-status');

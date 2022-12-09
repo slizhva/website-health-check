@@ -5,7 +5,7 @@ namespace App\Events;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\PrivateChannel;
 
-class LinkCommandSuccess extends Event
+class LinkCommandSuccessEvent extends Event
 {
     public function __construct(
         public string $info

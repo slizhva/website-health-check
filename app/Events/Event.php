@@ -9,4 +9,6 @@ use Illuminate\Queue\SerializesModels;
 abstract class Event
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
+
+    public string $info;
 }

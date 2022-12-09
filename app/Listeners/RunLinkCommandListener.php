@@ -5,9 +5,9 @@ namespace App\Listeners;
 use Exception;
 
 use App\Events\Event;
-use App\Events\LinkCommandSuccess;
+use App\Events\LinkCommandSuccessEvent;
 
-class RunLinkCommand
+class RunLinkCommandListener
 {
     private function executeCurl(object $request): bool|string
     {
@@ -34,7 +34,7 @@ class RunLinkCommand
         $status = $result->status ?? null;
         $name = $result->name ?? $event->link->url ?? '';
 
-        LinkCommandSuccess::dispatchIf(
+        LinkCommandSuccessEvent::dispatchIf(
             $status === "stopped",
             "$name restarted!"
         );

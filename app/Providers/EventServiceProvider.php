@@ -5,12 +5,11 @@ namespace App\Providers;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use App\Events\LinkUnavailable;
-use App\Events\LinkCheckException;
-use App\Events\LinkCommandSuccess;
-use App\Listeners\RunLinkCommand;
-use App\Listeners\LinkStatusNotification;
-use App\Listeners\CommandNotification;
+use App\Events\LinkUnavailableEvent;
+use App\Events\LinkCheckExceptionEvent;
+use App\Events\LinkCommandSuccessEvent;
+use App\Listeners\RunLinkCommandListener;
+use App\Listeners\StatusNotificationListener;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -23,15 +22,15 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-        LinkUnavailable::class => [
-            LinkStatusNotification::class,
-            RunLinkCommand::class,
+        LinkUnavailableEvent::class => [
+            StatusNotificationListener::class,
+            RunLinkCommandListener::class,
         ],
-        LinkCheckException::class => [
-            LinkStatusNotification::class,
+        LinkCheckExceptionEvent::class => [
+            StatusNotificationListener::class,
         ],
-        LinkCommandSuccess::class => [
-            CommandNotification::class,
+        LinkCommandSuccessEvent::class => [
+            StatusNotificationListener::class,
         ],
     ];
 

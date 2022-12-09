@@ -5,12 +5,12 @@ namespace App\Listeners;
 use Illuminate\Support\Facades\Notification;
 
 use App\Events\Event;
-use App\Notifications\HealthStatusNotification;
+use App\Notifications\StatusNotification;
 
-class CommandNotification
+class StatusNotificationListener
 {
     public function handle(Event $event):void {
-        Notification::send('telegram', new HealthStatusNotification([
+        Notification::send('telegram', new StatusNotification([
             'to' => env('TELEGRAM_CHAT_ID'),
             'content' => $event->info,
         ]));

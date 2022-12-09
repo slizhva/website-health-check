@@ -4,11 +4,11 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Notification;
-use App\Notifications\HealthStatusNotification;
 
 use App\Models\Links;
+use App\Notifications\StatusNotification;
 
-class SendHealthStatistics extends Command
+class SendHealthStatisticsCommand extends Command
 {
     protected $signature = 'health:statistics';
     protected $description = 'Send health statistics';
@@ -27,7 +27,7 @@ class SendHealthStatistics extends Command
                 $link->url . "\n\n";
         }
 
-        Notification::send('telegram', new HealthStatusNotification([
+        Notification::send('telegram', new StatusNotification([
             'to' => env('TELEGRAM_CHAT_ID'),
             'content' => $statistics,
         ]));
