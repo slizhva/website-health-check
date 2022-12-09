@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('links', function (Blueprint $table) {
-            $table->longText('success_content')->after('link')->nullable();
+            $table->longText('success_content')->after('url')->nullable();
         });
     }
 

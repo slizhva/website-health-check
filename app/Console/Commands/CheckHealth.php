@@ -32,11 +32,11 @@ class CheckHealth extends Command
     public function handle():int
     {
         $links = Links
-            ::get(['id', 'user', 'link', 'success_content', 'status']);
+            ::get(['id', 'user', 'url', 'success_content', 'status']);
 
         foreach ($links as $link) {
             try {
-                $linkContent = file_get_contents($link->link);
+                $linkContent = file_get_contents($link->url);
                 if (str_contains($linkContent, $link['success_content'])) {
                     Links::where('id', $link->id)->update(['status' => Links::STATUS_AVAILABLE]);
                 } else {
@@ -44,7 +44,7 @@ class CheckHealth extends Command
 
                     Notification::send('telegram', new HealthStatusNotification([
                         'to' => env('TELEGRAM_CHAT_ID'),
-                        'content' => 'ERROR: ' . $link->link,
+                        'content' => 'ERROR: ' . $link->url,
                     ]));
 
                     $response = $this->executeCurl($link->error_command);
@@ -66,7 +66,7 @@ class CheckHealth extends Command
                 Links::where('id', $link->id)->update(['status' => Links::STATUS_PENDING]);
                 Notification::send('telegram', new HealthStatusNotification([
                     'to' => env('TELEGRAM_CHAT_ID'),
-                    'content' => 'PENDING: ' . $link->link,
+                    'content' => 'PENDING: ' . $link->url,
                 ]));
             }
         }

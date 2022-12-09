@@ -18,14 +18,14 @@
         <x-link.form action="{{ route('dashboard.link.add') }}" buttonText="Add"></x-link.form>
     </div>
     <div class="row border-bottom border-top bg-light">
-        <div class="col-md-8 border-start">Link</div>
+        <div class="col-md-8 border-start">URL</div>
         <div class="col-md-2 border-start">Last check</div>
         <div class="col-md-1 border-start"></div>
         <div class="col-md-1 border-start border-end"></div>
     </div>
     @foreach($links as $link)
         <div class="row border-bottom align-items-center">
-            <div class="p3 col-md-8 border-start p-1">{{ $link->link }}</div>
+            <div class="p3 col-md-8 border-start p-1">{{ $link->url }}</div>
             <div class="col-md-2 border-start {{ $link->status === Links::STATUS_AVAILABLE ? 'text-success' : 'text-danger' }}">
                 {{ Links::STATUS_LABEL[$link->status] }}
             </div>

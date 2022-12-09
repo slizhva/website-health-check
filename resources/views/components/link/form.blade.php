@@ -3,15 +3,15 @@
 
     @if (isset($link->id))<input name="id" type="number" value="{{ $link->id }}" hidden>@endif
 
-    <label for="link">Link:</label>
+    <label for="url">URL:</label>
     <input
-        id="link"
-        name="link"
+        id="url"
+        name="url"
         type="text"
         placeholder="https://google.com"
         class="col-md-12"
         required
-        value="@if (isset($link->link)){{ $link->link }}@endif"
+        value="@if (isset($link->url)){{ $link->url }}@endif"
     >
 
     <label class="mt-2" for="success_content">Content to check:</label>
