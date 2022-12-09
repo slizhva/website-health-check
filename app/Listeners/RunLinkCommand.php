@@ -2,11 +2,10 @@
 
 namespace App\Listeners;
 
-use App\Notifications\HealthStatusNotification;
 use Exception;
 
-use App\Events\LinkUnavailable;
-use Illuminate\Support\Facades\Notification;
+use App\Events\Event;
+use App\Events\LinkCommandSuccess;
 
 class RunLinkCommand
 {
@@ -27,18 +26,17 @@ class RunLinkCommand
         return $state_result;
     }
 
-    public function handle(LinkUnavailable $event):void {
+    public function handle(Event $event):void {
         $response = $this->executeCurl($event->link->error_command);
         try {
             $result = json_decode($response, false);
         } catch (Exception) {}
         $status = $result->status ?? null;
-        $name = $result->name ?? null;
-        if ($status === "stopped") {
-            Notification::send('telegram', new HealthStatusNotification([
-                'to' => env('TELEGRAM_CHAT_ID'),
-                'content' => ($name ?: $event->link->url)  . ' server restarted!',
-            ]));
-        }
+        $name = $result->name ?? $event->link->url ?? '';
+
+        LinkCommandSuccess::dispatchIf(
+            $status === "stopped",
+            "$name restarted!"
+        );
     }
 }

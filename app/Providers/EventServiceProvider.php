@@ -7,8 +7,10 @@ use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use App\Events\LinkUnavailable;
 use App\Events\LinkCheckException;
+use App\Events\LinkCommandSuccess;
 use App\Listeners\RunLinkCommand;
 use App\Listeners\LinkStatusNotification;
+use App\Listeners\CommandNotification;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -27,6 +29,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         LinkCheckException::class => [
             LinkStatusNotification::class,
+        ],
+        LinkCommandSuccess::class => [
+            CommandNotification::class,
         ],
     ];
 
