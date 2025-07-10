@@ -15,7 +15,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-         $schedule->command('health:check')->everyTwoMinutes();
+         $schedule->command('health:check')->everyThirtyMinutes();
          $schedule->command('health:statistics')->dailyAt('10:00');
     }
 
