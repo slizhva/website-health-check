@@ -19,7 +19,7 @@ class SendHealthStatisticsCommand extends Command
             ::orderBy('user', 'asc')
             ->get(['url', 'status']);
 
-        $statistics = '';
+        $statistics = 'Daily Status:';
         foreach ($links as $link) {
             $statistics .=
                 Links::STATUS_LABEL[$link->status] .
