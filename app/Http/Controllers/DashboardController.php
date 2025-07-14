@@ -20,7 +20,7 @@ class DashboardController extends Controller
         $links = Links
             ::where('user', Auth::id())
             ->orderBy('id', 'desc')
-            ->get(['id', 'url', 'success_content', 'status']);
+            ->get(['id', 'name', 'url', 'success_content', 'status']);
 
         return view('dashboard', [
             'links' => $links
@@ -31,6 +31,7 @@ class DashboardController extends Controller
     {
         $link = new Links;
         $link->user = Auth::id();
+        $link->name = $request->get('name');
         $link->url = $request->get('url');
         $link->success_content = $request->get('success_content');
         $link->status = Links::STATUS_PENDING;
@@ -59,6 +60,7 @@ class DashboardController extends Controller
     {
         $link = Links::find($request->get('id'));
         $link->url = $request->get('url');
+        $link->name = $request->get('name');
         $link->success_content = $request->get('success_content');
         $link->status = Links::STATUS_PENDING;
         $link->error_command = [
