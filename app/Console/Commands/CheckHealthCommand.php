@@ -17,13 +17,13 @@ class CheckHealthCommand extends Command
 
     public function handle(): int
     {
-        $links = Links::get(['id', 'user', 'name', 'url', 'success_content', 'status']);
+        $links = Links::get(['id', 'user', 'name', 'url', 'header', 'success_content', 'status']);
 
         foreach ($links as $link) {
             try {
                 $curl = curl_init();
 
-                curl_setopt_array($curl, [
+                $curlOptions = [
                     CURLOPT_URL => $link['url'],
                     CURLOPT_RETURNTRANSFER => true,
                     CURLOPT_ENCODING => '',
@@ -32,7 +32,13 @@ class CheckHealthCommand extends Command
                     CURLOPT_FOLLOWLOCATION => true,
                     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                     CURLOPT_CUSTOMREQUEST => 'GET',
-                ]);
+                ];
+
+                if (trim($link['header'])) {
+                    $curlOptions[CURLOPT_HTTPHEADER] = $link['header'];
+                }
+
+                curl_setopt_array($curl, $curlOptions);
 
                 $response = curl_exec($curl);
 

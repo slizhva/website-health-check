@@ -24,7 +24,8 @@ class Links extends Model
     protected $fillable = [
         'user',
         'name',
-        'link',
+        'url',
+        'header',
         'success_content',
         'status',
     ];

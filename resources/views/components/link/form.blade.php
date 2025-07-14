@@ -26,6 +26,16 @@
         value="@if (isset($link->url)){{ $link->url }}@endif"
     />
 
+    <label class="mt-2" for="header">Header:</label>
+    <textarea
+        id="header"
+        name="header"
+        type="text"
+        placeholder="Cookie: __ddg10_=1752500454; __ddg1_=sahZeLT9dJ1W2QU40pNn; __ddg8_=99ZOOaX0tIhpSFFC; __ddg9_=128.65.56.58; app=redesign; cda_passed=1; cdn_cache_id=b7b4127636; device-id=3901dc60-2a1e-4e86-91c2-c0494326839c"
+        rows="4"
+        class="col-md-12"
+    >@if (isset($link->header)){{ $link->header }}@endif</textarea>
+
     <label class="mt-2" for="success_content">Content to check:</label>
     <textarea
         id="success_content"
