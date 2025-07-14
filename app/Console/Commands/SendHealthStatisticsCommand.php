@@ -17,14 +17,15 @@ class SendHealthStatisticsCommand extends Command
     {
         $links = Links
             ::orderBy('user', 'asc')
-            ->get(['url', 'status']);
+            ->get(['name', 'url', 'status']);
 
         $statistics = 'DAILY STATUS:' . "\n";
         foreach ($links as $link) {
-            $statistics .=
-                Links::STATUS_LABEL[$link->status] .
-                ": " .
-                $link->url . "\n\n";
+            $statistics .= Links::STATUS_LABEL[$link->status] . ": " . $link->url;
+            if ($link->name) {
+                $statistics .= ' (' . $link->name .')';
+            }
+            $statistics .= "\n";
         }
 
         Notification::send('telegram', new StatusNotification([

@@ -13,6 +13,10 @@ class LinkCheckExceptionEvent extends Event
         public Links $link
     ) {
         $this->info = 'EXCEPTION' . ': ' . $this->link->url;
+
+        if ($this->link->name) {
+            $this->info .= ' (' . $this->link->name . ')';
+        }
     }
 
     public function broadcastOn():Channel|array {

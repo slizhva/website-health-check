@@ -13,6 +13,10 @@ class LinkUnavailableEvent extends Event
         public Links $link
     ) {
         $this->info = 'UNAVAILABLE' . ': ' . $this->link->url;
+
+        if ($this->link->name) {
+            $this->info .= ' (' . $this->link->name . ')';
+        }
     }
 
     public function broadcastOn():Channel|array {

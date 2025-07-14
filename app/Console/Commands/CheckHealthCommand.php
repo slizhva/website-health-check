@@ -17,8 +17,7 @@ class CheckHealthCommand extends Command
 
     public function handle(): int
     {
-        $links = Links
-            ::get(['id', 'user', 'url', 'success_content', 'status']);
+        $links = Links::get(['id', 'user', 'name', 'url', 'success_content', 'status']);
 
         foreach ($links as $link) {
             try {
