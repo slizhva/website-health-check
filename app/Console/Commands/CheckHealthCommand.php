@@ -34,8 +34,8 @@ class CheckHealthCommand extends Command
                     CURLOPT_CUSTOMREQUEST => 'GET',
                 ];
 
-                if (trim($link['header'])) {
-                    $curlOptions[CURLOPT_HTTPHEADER] = $link['header'];
+                if ($header = trim($link['header'])) {
+                    $curlOptions[CURLOPT_HTTPHEADER] = explode("\n", $header);
                 }
 
                 curl_setopt_array($curl, $curlOptions);
